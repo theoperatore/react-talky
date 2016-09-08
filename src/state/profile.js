@@ -17,8 +17,8 @@ export function fetchProfile() {
     // simulate network request
     getProfile()
       .then(response => response.json())
+      .then(payload => dispatch({ type: 'RECEIVE_PROFILE', payload }))
       .then(() => clearInterval(counterInterval))
-      .then(payload => dispatch({ type: 'RECEIVE_PROFILE', payload }));
   }
 }
 
