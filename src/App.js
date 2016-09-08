@@ -40,6 +40,7 @@ class App extends Component {
         <p className='h1'>{count} (ms) -- request time</p>
         <h1>You are <strong>{profile.name}</strong></h1>
         <p>{profile.isLoading ? 'Fetching data...' : ''}</p>
+        <p className='bg-red'>{profile.error && profile.error}</p>
       </section>
     );
   }

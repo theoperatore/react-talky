@@ -1,7 +1,13 @@
 export function getProfile() {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve({
+      const throwError = Math.round(Math.random() * 10) >= 6;
+
+      if (throwError) {
+        return reject({ message: 'An unbelievable error occurred... network stuff is hard' });
+      }
+
+      return resolve({
         json() {
           return new Promise(resolve => resolve({
             name: 'Getting better at following the data!',
