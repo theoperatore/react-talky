@@ -1,106 +1,46 @@
 import React, { Component } from 'react';
 import Button from './components/Button';
-import Item from './components/Item';
+
 import './App.css';
+import logo from './logo.svg';
+
+import { fetchProfile } from './state/profile';
 
 class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      count: 0,
-      items: [],
-      inputValue: '',
-    };
-
-    this.handleIncrememt = this.handleIncrememt.bind(this);
-    this.handleName = this.handleName.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleIncrement = this.handleIncrement.bind(this);
   }
 
-  handleIncrememt() {
-    this.setState({
-      count: this.state.count + 1,
-    });
-  }
 
-  handleName() {
-    const { inputValue } = this.state;
-
-    if (!inputValue || inputValue === '') return;
-
-    let desc = `Nope, you aren't ${inputValue}, you're Steve.`;
-    if (inputValue.toLowerCase() === 'steve') {
-      desc = 'Nope, you aren\'t Steve. Steve is much cooler than you.';
-    }
-
-    this.setState({
-      items: [
-        ...this.state.items,
-        {
-          name: desc,
-        },
-      ],
-      inputValue: '',
-    });
-  }
-
-  handleChange(ev) {
-    const name = ev.target.value.trim();
-    this.setState({ inputValue: name });
+  handleIncrement() {
+    this.props.updateState(fetchProfile());
   }
 
   render() {
     const {
       count,
-      items,
-      inputValue,
-    } = this.state;
+      profile,
+    } = this.props.currentState;
 
     return (
-      <main>
-
-        <section className='p2 mb1'>
-          <h1 className='p0'>Sup Chickens</h1>
-          <p>Just a normal normal paragraph tag for your good good html times.</p>
-          <p>A component is like a sort of <strong>template</strong> and <strong>controller</strong>.</p>
-          <p>However, not everything needs to be a React Component...</p>
-          <Button
-            className='mr1 block'
-            onClick={this.handleIncrememt}
-          >Increment</Button>
-          <p className='h1'>{count}</p>
-        </section>
-
-
-
-        <section className='p2 mb1'>
-          <p>No two-way data binding between a React Component and input components.</p>
-          <input
-            type='text'
-            className='block field mb1'
-            placeholder='Name?'
-            value={inputValue}
-            onChange={this.handleChange}
+      <section className='p2 mb1'>
+        <img
+          src={logo}
+          className="App-logo"
+          alt="logo"
           />
-          <Button
-            onClick={this.handleName}
-          >That's my name</Button>
-
-          <div className='mt1'>
-            <ul>
-              {
-                items.map((itm, i) => (
-                  <Item
-                    key={i}
-                    desc={itm.name}
-                  />
-                ))
-              }
-            </ul>
-          </div>
-        </section>
-      </main>
+        <h1 className='p0 inline-block align-top'>React/Redux Stuffs</h1>
+        <Button
+          disabled={profile.isLoading}
+          className='p3 mt3'
+          onClick={this.handleIncrement}
+        >Load Profile</Button>
+        <p className='h1'>{count} (ms) -- request time</p>
+        <h1>You are <strong>{profile.name}</strong></h1>
+        <p>{profile.isLoading ? 'Fetching data...' : ''}</p>
+      </section>
     );
   }
 }
